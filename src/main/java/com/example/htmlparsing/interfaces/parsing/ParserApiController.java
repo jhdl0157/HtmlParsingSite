@@ -10,9 +10,6 @@ import javax.validation.Valid;
 public class ParserApiController {
     @PostMapping()
     public void registerHtml(@RequestBody @Valid ParsingDto.ParserRequest parserRequest){
-        if(parserRequest!=null){
-            throw new EntityNotFoundException();
-        }
         System.out.println(parserRequest.getUrl());
         System.out.println(parserRequest.getType());
         System.out.println(parserRequest.getInvide());

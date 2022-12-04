@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 public class ParsingDto {
@@ -20,6 +21,7 @@ public class ParsingDto {
         private String type;
 
         @NotEmpty(message = "invide 는 필수값입니다")
+        @Min(1)
         private int invide;
     }
 
