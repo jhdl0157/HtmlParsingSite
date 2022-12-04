@@ -1,6 +1,7 @@
 package com.example.htmlparsing.infrastructure;
 
-import com.example.htmlparsing.domain.JsoupExecutor;
+import com.example.htmlparsing.common.exception.EntityNotFoundException;
+import com.example.htmlparsing.domain.parsing.JsoupExecutor;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,7 +21,7 @@ public class JsoupExecutorImpl implements JsoupExecutor {
             Document document = response.parse();
             return document.html();
         } catch (IllegalArgumentException | UnknownHostException e) {
-            e.printStackTrace();
+            throw new EntityNotFoundException();
         } catch (Exception e) {
             e.printStackTrace();
         }
