@@ -10,6 +10,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="//code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script type="text/javascript">
         $(document).ready(function() {
             $("#btn").on('click', function() {
@@ -19,6 +21,28 @@
                     formData[e.name] = e.value;
                 });
                 console.log(formData);
+                $.ajax({
+                    type: "POST",
+                    url: "/api/v1/parsings",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(formData),
+                    dataType: "json",
+                    async: true,
+                    success: function (e) {
+                        if(e.code == 200){
+                            let result = e.data;
+                            $("#quotient").text(result.quotient);
+                            $("#remainder").text(result.remainder);
+                        } else {
+                            alert(e.message);
+                        }
+                        console.log(Array.isArray(e.data));
+                    },
+                    error: function (xhr, status, error) {
+                        alert('error occurred during parse url');
+                        console.log(error);
+                    }
+                });
             });
         });
     </script>
@@ -74,7 +98,7 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="code">출력 묶음단</label>
-                        <input type="number" class="form-control" name="invide" placeholder="" required>
+                        <input type="number" class="form-control" name="invide" min="1" placeholder="" required>
                         <div class="invalid-feedback">
                             출력 묶음단을 입력해주세요.
                         </div>
@@ -85,20 +109,30 @@
             </form>
             <hr class="mb-4">
             <div class="mb-3">
-                <label for="email">몫</label>
-                <textarea class="form-control h-25" rows="5" readonly>
+                <label for="quotient">몫</label>
+                <textarea class="form-control h-25" id="quotient" rows="5" readonly>
             </textarea>
 
             </div>
             <div class="mb-3">
-                <label for="email">나머지</label>
-                <textarea class="form-control h-10" rows="3" readonly>
+                <label for="remainder">나머지</label>
+                <textarea class="form-control h-10" id="remainder" rows="3" readonly>
             </textarea>
 
             </div>
         </div>
     </div>
 </div>
+<script src="/resource/common/common.js"></script>
+
+<script th:inline="javascript">
+    const params = /*[[ ${param} ]]*/ null;
+
+    if (params.msg) {
+        successModal(params.msg);
+    }
+
+</script>
 </body>
 
 </html>
