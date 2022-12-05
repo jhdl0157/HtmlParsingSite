@@ -1,6 +1,7 @@
 package com.example.htmlparsing.infrastructure;
 
 import com.example.htmlparsing.common.exception.EntityNotFoundException;
+import com.example.htmlparsing.common.exception.UrlException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ class JsoupExecutorImplTest {
     @Test
     void 잘못된_URL로_HTML_가져오기(){
         String TARGET_URL="htt://naver.com";
-        Assertions.assertThrows(EntityNotFoundException.class, () ->{
+        Assertions.assertThrows(UrlException.class, () ->{
             JsoupExecutorImpl jsoupExecutor=new JsoupExecutorImpl();
             jsoupExecutor.parseUrl(TARGET_URL);
         });
