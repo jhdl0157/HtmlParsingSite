@@ -53,21 +53,15 @@ public class ParsingServiceImpl implements ParsingService {
                 .build();
     };
     public String combineAlphaAndNumber(ParsingResult parsingResult){
+        //TODO 에러 던지는 클래스 만들기
         if(Objects.isNull(parsingResult)) throw new EntityNotFoundException();
         StringBuffer sb=new StringBuffer();
         String english=parsingResult.getEnglish();
         String numbers=parsingResult.getNumbers();
-        if(english.isEmpty()) return sb.append(numbers).toString();
-        if(numbers.isEmpty()) return sb.append(english).toString();
-        for(int i=1;i<=english.length();i++){
-            if((i>1) && (numbers.length()>=i-1)){
-                sb.append(numbers.charAt(i-2));
-            }
-            sb.append(english.charAt(i-1));
-        }
-        if(english.length()<=numbers.length()){
-            int a=numbers.length()-english.length();
-            sb.append(numbers.substring(numbers.length()-a-1));
+        int index = english.length() >= numbers.length() ? english.length() : numbers.length();
+        for(int i=0; i<index; i++) {
+            if(i<english.length()) sb.append(english.charAt(i));
+            if(i<numbers.length()) sb.append(numbers.charAt(i));
         }
         return sb.toString();
     };
