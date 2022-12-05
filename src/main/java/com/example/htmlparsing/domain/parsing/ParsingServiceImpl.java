@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -25,17 +27,31 @@ public class ParsingServiceImpl implements ParsingService {
     public String convertAccordingType(String html,ConvertType convertType){
         switch (convertType){
             case TAG: {
-                String deleteTag=html.replaceAll(Regex.DELETE_TAG.getRegexPattern(), "");
-                String deleteMsg=deleteTag.replaceAll(Regex.DELETE_EXCEPT_ALPHA_AND_NUMBER.getRegexPattern(), "");
-                return deleteMsg;
+                return Regex.tagRegex(html);
+            }
+            case TEXT:{
+                return Regex.textRegex(html);
             }
         }
         throw new BaseException();
     }
-//    private Map<String,Integer> divideTextAndNumbers(String ConvertHtml){
+    public ParsingResult divideTextAndNumbers(String convertHtml){
+        String english= convertHtml.replaceAll(Regex.DELETE_NUMBER.getRegexPattern(),"");
+        var streamString=getSplitStream(english);
+        String al=streamString.sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.joining());
+
+        String num=convertHtml.replaceAll(Regex.EXPECT_NUMBER.getRegexPattern(),"");
+        var as=getSplitStream(num);
+        String res=as.sorted().collect(Collectors.joining());
+        return ParsingResult.builder()
+                .english(al)
+                .numbers(num)
+                .build();
+    };
+//    private String combineAlphaAndNumber(String alpha,String numbers){
 //
 //    };
-//    private String mixAlphaAndNumber(String alpha,String numbers){
-//
-//    };
+public Stream<String> getSplitStream(String text) {
+    return Pattern.compile("").splitAsStream(text).sorted();
+}
 }
