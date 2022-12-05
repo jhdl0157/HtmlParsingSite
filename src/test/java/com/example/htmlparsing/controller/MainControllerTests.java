@@ -1,7 +1,6 @@
 package com.example.htmlparsing.controller;
 
-import com.example.htmlparsing.config.JasyptConfig;
-import com.example.htmlparsing.domain.parsing.ParsingService;
+
 import com.example.htmlparsing.interfaces.MainController;
 import com.example.htmlparsing.interfaces.parsing.ParserApiController;
 import com.example.htmlparsing.interfaces.parsing.ParsingDto;
