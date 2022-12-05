@@ -1,10 +1,12 @@
 package com.example.htmlparsing.domain.parsing;
 
 import com.example.htmlparsing.common.exception.BaseException;
+import com.example.htmlparsing.common.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -19,6 +21,8 @@ public class ParsingServiceImpl implements ParsingService {
         var html=getHtml(url);
         var StringToConvertType=ConvertType.validType(type);
         var convertHtml=convertAccordingType(html,StringToConvertType);
+        var parsingData=divideTextAndNumbers(convertHtml);
+
         System.out.println(convertHtml);
     }
     private String getHtml(String url){
@@ -45,12 +49,28 @@ public class ParsingServiceImpl implements ParsingService {
         String res=as.sorted().collect(Collectors.joining());
         return ParsingResult.builder()
                 .english(al)
-                .numbers(num)
+                .numbers(res)
                 .build();
     };
-//    private String combineAlphaAndNumber(String alpha,String numbers){
-//
-//    };
+    public String combineAlphaAndNumber(ParsingResult parsingResult){
+        if(Objects.isNull(parsingResult)) throw new EntityNotFoundException();
+        StringBuffer sb=new StringBuffer();
+        String english=parsingResult.getEnglish();
+        String numbers=parsingResult.getNumbers();
+        if(english.isEmpty()) return sb.append(numbers).toString();
+        if(numbers.isEmpty()) return sb.append(english).toString();
+        for(int i=1;i<=english.length();i++){
+            if((i>1) && (numbers.length()>=i-1)){
+                sb.append(numbers.charAt(i-2));
+            }
+            sb.append(english.charAt(i-1));
+        }
+        if(english.length()<=numbers.length()){
+            int a=numbers.length()-english.length();
+            sb.append(numbers.substring(numbers.length()-a-1));
+        }
+        return sb.toString();
+    };
 public Stream<String> getSplitStream(String text) {
     return Pattern.compile("").splitAsStream(text).sorted();
 }
