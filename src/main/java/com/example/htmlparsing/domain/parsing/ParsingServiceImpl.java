@@ -1,35 +1,53 @@
 package com.example.htmlparsing.domain.parsing;
 
+
+import com.example.htmlparsing.common.ConvertType;
+import com.example.htmlparsing.common.ErrorCode;
 import com.example.htmlparsing.common.exception.BaseException;
-import com.example.htmlparsing.common.exception.EntityNotFoundException;
 import com.example.htmlparsing.interfaces.parsing.ParsingDto;
+import com.example.htmlparsing.util.ParserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Map;
+import javax.transaction.Transactional;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ParsingServiceImpl implements ParsingService {
     private final JsoupExecutor jsoupExecutor;
+    private final ParsingReader parsingReader;
+    private final ParsingStore parsingStore;
     @Override
-    public ParsingDto.ParserResponse getQuotientAndRemainder(String url, String type, int invide) {
+    @Transactional
+    public ParsingDto.ParserResponse getQuotientAndRemainder(final String url, final String type, final int invide) {
+        if(url.isEmpty() && type.isEmpty() && Objects.isNull(invide)) throw new BaseException("입력 값에 문제가 있습니다.", ErrorCode.COMMON_INVALID_PARAMETER);
+        if(parsingReader.exitParsing(url, ConvertType.validType(type),invide)){
+            var parsing=parsingReader.getParsing(url, ConvertType.validType(type),invide);
+            return ParsingDto.ParserResponse
+                    .builder()
+                    .remainder(parsing.getRemainder())
+                    .quotient(parsing.getQuotient())
+                    .build();
+        }
         val html=getHtml(url);
-        val StringToConvertType=ConvertType.validType(type);
-        val convertHtml=convertAccordingType(html,StringToConvertType);
-        val parsingData=divideTextAndNumbers(convertHtml);
-        val combineEnglishAndNumbers=combineAlphaAndNumber(parsingData);
+        val StringToConvertType= ConvertType.validType(type);
+        val convertHtml= ParserUtil.convertAccordingType(html,StringToConvertType);
+        val parsingData=ParserUtil.divideTextAndNumbers(convertHtml);
+        val combineEnglishAndNumbers=ParserUtil.combineAlphaAndNumber(parsingData);
         val quotient=combineEnglishAndNumbers.substring(0,(combineEnglishAndNumbers.length() / invide) * invide);
         val remainder=combineEnglishAndNumbers.substring(combineEnglishAndNumbers.length()-combineEnglishAndNumbers.length()%invide);
+        var newParsing= Parsing.builder()
+                .url(url)
+                .convertType(StringToConvertType)
+                .invide(invide)
+                .quotient(quotient)
+                .remainder(remainder).build();
+        parsingStore.store(newParsing);
         return ParsingDto.ParserResponse
                 .builder()
                 .quotient(quotient)
@@ -39,46 +57,4 @@ public class ParsingServiceImpl implements ParsingService {
     private String getHtml(String url){
         return jsoupExecutor.parseUrl(url);
     };
-    public String convertAccordingType(String html,ConvertType convertType){
-        switch (convertType){
-            case TAG: {
-                return Regex.tagRegex(html);
-            }
-            case TEXT:{
-                return Regex.textRegex(html);
-            }
-        }
-        throw new BaseException();
-    }
-    public ParsingResult divideTextAndNumbers(String convertHtml){
-        String english= convertHtml.replaceAll(Regex.DELETE_NUMBER.getRegexPattern(),"");
-        var streamString=getSplitStream(english);
-        String sortedEnglish=streamString.sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.joining());
-
-        String num=convertHtml.replaceAll(Regex.EXPECT_NUMBER.getRegexPattern(),"");
-        var streamNumbers=getSplitStream(num);
-        String sortedNumbers=streamNumbers.sorted().collect(Collectors.joining());
-        log.info("[정렬된 문자] : {}",sortedEnglish);
-        log.info("[정렬된 숫자] : {}",sortedNumbers);
-        return ParsingResult.builder()
-                .english(sortedEnglish)
-                .numbers(sortedNumbers)
-                .build();
-    };
-    public String combineAlphaAndNumber(ParsingResult parsingResult){
-        //TODO 에러 던지는 클래스 만들기
-        if(Objects.isNull(parsingResult)) throw new EntityNotFoundException();
-        StringBuffer sb=new StringBuffer();
-        String english=parsingResult.getEnglish();
-        String numbers=parsingResult.getNumbers();
-        int index = english.length() >= numbers.length() ? english.length() : numbers.length();
-        for(int i=0; i<index; i++) {
-            if(i<english.length()) sb.append(english.charAt(i));
-            if(i<numbers.length()) sb.append(numbers.charAt(i));
-        }
-        return sb.toString();
-    };
-public Stream<String> getSplitStream(String text) {
-    return Pattern.compile("").splitAsStream(text).sorted();
-}
 }
