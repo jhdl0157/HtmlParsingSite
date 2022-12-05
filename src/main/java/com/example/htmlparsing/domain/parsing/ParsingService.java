@@ -1,5 +1,7 @@
 package com.example.htmlparsing.domain.parsing;
 
+import com.example.htmlparsing.interfaces.parsing.ParsingDto;
+
 import java.util.Map;
 
 public interface ParsingService {
@@ -10,5 +12,5 @@ public interface ParsingService {
     // 4. 숫자, 문자를 정렬한다.
     // 5. 교차 출력을 만든다
     // 6. number값에 따라서 문자를 나눈다.
-    void getQuotientAndRemainder(String url,String type,int invide);
+    ParsingDto.ParserResponse getQuotientAndRemainder(String url, String type, int invide);
 }
