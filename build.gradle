@@ -32,8 +32,10 @@ dependencies {
 
     implementation 'org.jsoup:jsoup:1.14.2'
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
+    testImplementation 'com.h2database:h2'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    systemProperty "jasypt.encryptor.password", project.getProperties().get("jasypt.encryptor.password")
 }
