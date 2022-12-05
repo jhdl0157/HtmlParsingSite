@@ -2,9 +2,13 @@ package com.example.htmlparsing.domain.parsing;
 
 import com.example.htmlparsing.common.exception.BaseException;
 import com.example.htmlparsing.common.exception.EntityNotFoundException;
+import com.example.htmlparsing.interfaces.parsing.ParsingDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -14,16 +18,23 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ParsingServiceImpl implements ParsingService {
     private final JsoupExecutor jsoupExecutor;
     @Override
-    public void getQuotientAndRemainder(String url,String type,int invide) {
-        var html=getHtml(url);
-        var StringToConvertType=ConvertType.validType(type);
-        var convertHtml=convertAccordingType(html,StringToConvertType);
-        var parsingData=divideTextAndNumbers(convertHtml);
-
-        System.out.println(convertHtml);
+    public ParsingDto.ParserResponse getQuotientAndRemainder(String url, String type, int invide) {
+        val html=getHtml(url);
+        val StringToConvertType=ConvertType.validType(type);
+        val convertHtml=convertAccordingType(html,StringToConvertType);
+        val parsingData=divideTextAndNumbers(convertHtml);
+        val combineEnglishAndNumbers=combineAlphaAndNumber(parsingData);
+        val quotient=combineEnglishAndNumbers.substring(0,(combineEnglishAndNumbers.length() / invide) * invide);
+        val remainder=combineEnglishAndNumbers.substring(combineEnglishAndNumbers.length()-combineEnglishAndNumbers.length()%invide);
+        return ParsingDto.ParserResponse
+                .builder()
+                .quotient(quotient)
+                .remainder(remainder)
+                .build();
     }
     private String getHtml(String url){
         return jsoupExecutor.parseUrl(url);
@@ -42,14 +53,16 @@ public class ParsingServiceImpl implements ParsingService {
     public ParsingResult divideTextAndNumbers(String convertHtml){
         String english= convertHtml.replaceAll(Regex.DELETE_NUMBER.getRegexPattern(),"");
         var streamString=getSplitStream(english);
-        String al=streamString.sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.joining());
+        String sortedEnglish=streamString.sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.joining());
 
         String num=convertHtml.replaceAll(Regex.EXPECT_NUMBER.getRegexPattern(),"");
-        var as=getSplitStream(num);
-        String res=as.sorted().collect(Collectors.joining());
+        var streamNumbers=getSplitStream(num);
+        String sortedNumbers=streamNumbers.sorted().collect(Collectors.joining());
+        log.info("[정렬된 문자] : {}",sortedEnglish);
+        log.info("[정렬된 숫자] : {}",sortedNumbers);
         return ParsingResult.builder()
-                .english(al)
-                .numbers(res)
+                .english(sortedEnglish)
+                .numbers(sortedNumbers)
                 .build();
     };
     public String combineAlphaAndNumber(ParsingResult parsingResult){
