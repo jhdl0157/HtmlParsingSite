@@ -1,4 +1,4 @@
-package com.example.htmlparsing.domain.parsing;
+package com.example.htmlparsing.common;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
