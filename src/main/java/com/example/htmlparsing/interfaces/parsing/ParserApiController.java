@@ -2,11 +2,12 @@ package com.example.htmlparsing.interfaces.parsing;
 
 import com.example.htmlparsing.application.ParsingFacade;
 import com.example.htmlparsing.common.CommonResponse;
-import com.example.htmlparsing.common.exception.EntityNotFoundException;
-import com.example.htmlparsing.domain.parsing.ParsingService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 

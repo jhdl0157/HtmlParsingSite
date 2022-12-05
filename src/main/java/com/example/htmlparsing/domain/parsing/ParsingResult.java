@@ -1,10 +1,7 @@
 package com.example.htmlparsing.domain.parsing;
 
-import com.example.htmlparsing.common.exception.BaseException;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.Objects;
 
 @Getter
 public class ParsingResult {

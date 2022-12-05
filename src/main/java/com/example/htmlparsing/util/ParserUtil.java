@@ -1,11 +1,10 @@
 package com.example.htmlparsing.util;
 
-import com.example.htmlparsing.common.ErrorCode;
-import com.example.htmlparsing.common.exception.BaseException;
-import com.example.htmlparsing.common.exception.EntityNotFoundException;
 import com.example.htmlparsing.common.ConvertType;
-import com.example.htmlparsing.domain.parsing.ParsingResult;
+import com.example.htmlparsing.common.ErrorCode;
 import com.example.htmlparsing.common.Regex;
+import com.example.htmlparsing.common.exception.BaseException;
+import com.example.htmlparsing.domain.parsing.ParsingResult;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;

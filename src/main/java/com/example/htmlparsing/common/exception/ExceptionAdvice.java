@@ -33,5 +33,9 @@ public class ExceptionAdvice {
         return CommonResponse.fail(e.getMessage(),e.getErrorCode().getErrorMsg());
     }
 
-
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UrlException.class)
+    public CommonResponse UrlException(BaseException e){
+        return CommonResponse.fail(e.getMessage(),e.getErrorCode().getErrorMsg());
+    }
 }

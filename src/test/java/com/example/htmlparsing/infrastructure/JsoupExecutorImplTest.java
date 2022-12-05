@@ -1,6 +1,5 @@
 package com.example.htmlparsing.infrastructure;
 
-import com.example.htmlparsing.common.exception.EntityNotFoundException;
 import com.example.htmlparsing.common.exception.UrlException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,5 @@
 package com.example.htmlparsing.application;
 
-import com.example.htmlparsing.common.CommonResponse;
 import com.example.htmlparsing.domain.parsing.ParsingService;
 import com.example.htmlparsing.interfaces.parsing.ParsingDto;
 import lombok.RequiredArgsConstructor;
