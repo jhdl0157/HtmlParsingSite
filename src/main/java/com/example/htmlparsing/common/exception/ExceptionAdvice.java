@@ -26,4 +26,12 @@ public class ExceptionAdvice {
     public CommonResponse NotMatchTypeExceptionResolver(NotMatchTypeException e){
         return CommonResponse.fail(e.getMessage(),e.getErrorCode().getErrorMsg());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BaseException.class)
+    public CommonResponse BaseException(BaseException e){
+        return CommonResponse.fail(e.getMessage(),e.getErrorCode().getErrorMsg());
+    }
+
+
 }
