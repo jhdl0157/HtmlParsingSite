@@ -5,8 +5,10 @@ import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
-
+/**
+ * inner class를 사용하여 응집도를 높임
+ *
+ */
 public class ParsingDto {
 
     @Getter
