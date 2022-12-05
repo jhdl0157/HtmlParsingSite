@@ -44,27 +44,27 @@ public class MainControllerTests {
                 .andExpect(handler().methodName("home"));
     }
 
-    @Test
-    @DisplayName("html 파싱 테스트")
-    void t2() throws Exception{
-        //GIVEN
-        String content = objectMapper.writeValueAsString(new ParsingDto.ParserRequest("https://gitlab.com/jongwons.choi/spring-boot-security-lecture", "HTML 태그 제거",3));
-        // WHEN
-        ResultActions resultActions = mvc
-                .perform(post("/api/v1/parsings")
-                        .content(content)
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andDo(print());
-
-        // THEN
-        resultActions
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(handler().handlerType(ParserApiController.class))
-                .andExpect(handler().methodName("registerHtml"))
-                .andExpect(jsonPath("result").value("SUCCESS"))
-                .andExpect(jsonPath("data.quotient").exists());
-    }
+//    @Test
+//    @DisplayName("html 파싱 테스트")
+//    void t2() throws Exception{
+//        //GIVEN
+//        String content = objectMapper.writeValueAsString(new ParsingDto.ParserRequest("https://google.com", "HTML 태그 제거",3));
+//        // WHEN
+//        ResultActions resultActions = mvc
+//                .perform(post("/api/v1/parsings")
+//                        .content(content)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                )
+//                .andDo(print());
+//
+//        // THEN
+//        resultActions
+//                .andExpect(status().is2xxSuccessful())
+//                .andExpect(handler().handlerType(ParserApiController.class))
+//                .andExpect(handler().methodName("registerHtml"))
+//                .andExpect(jsonPath("result").value("SUCCESS"))
+//                .andExpect(jsonPath("data.quotient").exists());
+//    }
 
     @Test
     @DisplayName("잘못된 URL_데이터 전송")
