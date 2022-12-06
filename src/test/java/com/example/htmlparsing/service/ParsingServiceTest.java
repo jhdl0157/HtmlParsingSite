@@ -22,7 +22,4 @@ public class ParsingServiceTest {
 
         assertTrue(result.getRemainder().length()<=10,"통과");
     }
-
-
-
 }

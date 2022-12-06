@@ -9,4 +9,13 @@ public class MainController {
     public String home(){
         return "main";
     }
+
+    @GetMapping("/tag")
+    public String deleteTag(){
+        return "tagRemove";
+    }
+    @GetMapping("/text")
+    public String deleteText(){
+        return "deleteText";
+    }
 }
