@@ -75,4 +75,11 @@ public class ParserUtil {
     private static Stream<String> getSplitStream(String text) {
         return Pattern.compile("").splitAsStream(text).sorted();
     }
+
+    public static String getQuotient(String result,int invide){
+        return result.substring(0,(result.length() / invide) * invide);
+    }
+    public static String getReminder(String result,int invide){
+        return result.substring(result.length()-result.length()%invide);
+    }
 }
