@@ -18,7 +18,9 @@ public class ParsingServiceTest {
     @Test
     @DisplayName("값을 넣고 결과값 확인")
     void t1(){
-        var result=parsingService.getQuotientAndRemainder("https://google.com","HTML 태그 제거",10);
+        var result=parsingService.getQuotientAndRemainder("http://wmphtml.bloodgang.shop/text","HTML 태그 제거",4);
+        System.out.println(result.getRemainder());
+        System.out.println(result.getRemainder());
 
         assertTrue(result.getRemainder().length()<=10,"통과");
     }
