@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 public class LogAop {
 
     // com.example.htmlparsing 이하 패키지의 모든 클래스 이하 모든 메서드에 적용
-    @Pointcut("execution(* com.example.htmlparsing..*.*(..)) throws com.example.htmlparsing.config.JasyptConfig")
+    @Pointcut("execution(* com.example.htmlparsing..*.*(..))")
     private void cut(){}
 
     // Pointcut에 의해 필터링된 경로로 들어오는 경우 메서드 호출 전에 적용
