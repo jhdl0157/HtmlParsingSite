@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
@@ -33,7 +34,7 @@ public class ParsingStoreTest {
         Parsing parsing=new Parsing("test.com", ConvertType.TAG,3,"testQuot","testRemiain");
         parsingRepository.save(parsing);
 
-        Parsing findParsing=parsingRepository.findById(1L).orElseThrow(()-> new IllegalArgumentException("값을 찾지 못했습니다."));
+        Parsing findParsing=parsingRepository.findByUrlAndConvertTypeAndInvide("test.com",ConvertType.TAG,3);
         Assertions.assertThat(parsingRepository.count()).isEqualTo(1);
         Assertions.assertThat(findParsing.getUrl()).isEqualTo("test.com");
         Assertions.assertThat(findParsing.getInvide()).isEqualTo(3);
