@@ -44,8 +44,6 @@ public class ParserUtil {
         String num=convertHtml.replaceAll(Regex.EXPECT_NUMBER.getRegexPattern(),"");
         var streamNumbers=getSplitStream(num);
         String sortedNumbers=streamNumbers.sorted().collect(Collectors.joining());
-        log.info("[정렬된 문자] : {}",sortedEnglish);
-        log.info("[정렬된 숫자] : {}",sortedNumbers);
         return ParsingResult.builder()
                 .english(sortedEnglish)
                 .numbers(sortedNumbers)

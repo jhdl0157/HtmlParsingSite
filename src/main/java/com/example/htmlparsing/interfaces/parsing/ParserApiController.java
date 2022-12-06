@@ -18,9 +18,7 @@ public class ParserApiController {
     private final ParsingFacade parsingFacade;
     @PostMapping()
     public CommonResponse registerHtml(@RequestBody @Valid ParsingDto.ParserRequest parserRequest){
-        System.out.println(parserRequest.toString());
         val result=parsingFacade.getCombineText(parserRequest);
-        System.out.println(result.toString());
         return CommonResponse.success(result);
     }
 
