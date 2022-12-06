@@ -6,6 +6,9 @@
     <br />
   </p> 
 
+## 12.06 업데이트 
+Jpa를 사용하여 입력값과 결과값을 저장 하였으나 클론후에 설정 값을 넣어주는 과정이 복잡하여 삭제 && 관련 테스트 코드도 제거
+
 ## 개발 프레임워크 및 라이브러리
 
 * Java 11
@@ -14,9 +17,8 @@
 * Lombok
 * Jsoup
 * Thymeleaf
-* Jasypt
-* Jpa
-* Mariadb
+* ~~Jasypt~~
+* ~~JPA~~
 
 ## 제약 조건
 1. 모든 문자 입력
@@ -97,7 +99,7 @@
 
 
 ## 3. 테스트 코드 작성
-- 단위 테스트, Controller 테스트, Service 테스트, Repository 테스트 코드 작성
+- 단위 테스트, Controller 테스트, Service 테스트, ~~Repository 테스트 코드~~ 작성
 
 ## 4. GitHubActions 이용하여 CI/CD 구축 및 배포
 - Code Push -> 테스트 -> 빌드 -> 이미지 빌드 -> 도커 허브 push -> ssh 접속 -> 도커 허브 pull -> docker run
