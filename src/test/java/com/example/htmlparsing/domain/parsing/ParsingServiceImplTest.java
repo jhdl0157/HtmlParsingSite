@@ -98,9 +98,8 @@ class ParsingServiceImplTest {
     }
 
     @Test
-    void 종합하여_테스트해보기(){
-        String expect="A1A2A2a3a3a3a3a3a3B3B3B3b4b4C4C4C4C4C4c4c4c4D4D4D4D4D4d4d4d4d4E4e4e4e5e5e5e5e5e5e5F5g5h5h5h5h5h5h5h5h5i5i5i5i5i5i5i5l5l5l5l6l6l6l6l6m6m6m6m6n6n6O6o6o6P6p6p6r8rrrsssTTTtttttttttttttUYyy";
-        String deleteTag= ParserUtil.convertAccordingType(HTML_TEST, ConvertType.TEXT);
+    void 종합하여_태그제거_테스트해보기(){
+        String deleteTag= ParserUtil.convertAccordingType(DELETE_TAG, ConvertType.TAG);
         System.out.println(deleteTag);
         ParsingResult parsingResult=ParserUtil.divideTextAndNumbers(deleteTag);
         System.out.println(parsingResult.getEnglish());
@@ -111,7 +110,19 @@ class ParsingServiceImplTest {
         String remainder=ParserUtil.getReminder(result,4);
         System.out.println("quo : "+quotient);
         System.out.println("remainder : "+ remainder);
-        assertEquals(expect,quotient);
+        assertEquals("a1a1c2d2d3e3i4lssTtv",quotient);
+        assertEquals("xzz",remainder);
+    }
+
+    @Test
+    void 종합하여_텍스트제거_테스트해보기(){
+        String deleteTag= ParserUtil.convertAccordingType(DELETE_TEXT, ConvertType.TEXT);
+        ParsingResult parsingResult=ParserUtil.divideTextAndNumbers(deleteTag);
+        String result=ParserUtil.combineAlphaAndNumber(parsingResult);
+        String quotient=ParserUtil.getQuotient(result,4);
+        String remainder=ParserUtil.getReminder(result,4);
+
+        assertEquals("a1a2a3a4a8bbCcDdddddEeeeeeeeeeeeFghhhhhhiilllllllmmmmnnOooPrsTTTtttttttttttUxYyy",quotient);
         assertEquals("",remainder);
     }
 }
