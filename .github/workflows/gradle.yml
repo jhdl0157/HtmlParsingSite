@@ -45,7 +45,7 @@ jobs:
     - name: Docker build & push to prod
       run: |
            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-           docker build -f Dockerfile-prod -t html .
+           docker build -f Dockerfile -t html .
            docker tag html ${{ secrets.DOCKER_HUB_PROD_REPO }}:1.0
            docker push ${{ secrets.DOCKER_HUB_PROD_REPO }}:1.0
     - name: prod SSH Remote Commands
