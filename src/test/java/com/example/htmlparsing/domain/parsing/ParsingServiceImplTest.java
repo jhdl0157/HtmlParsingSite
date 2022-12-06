@@ -14,22 +14,44 @@ class ParsingServiceImplTest {
             "</script>" +
             "<head>\n" +
             "    <meta charset=\"UTF-8\">\n" +
-            "    <title>Title??!!@1234</title>\n" +
+            "    <title>TiAAABBBtle??!!@1234</title>\n" +
             "</head>\n" +
             "<body>\n" +
-            "hi" +
+            "hiCCCC23333333344444444444444444444455555555555555555555555555566666666666666666DDDD" +
+            "</body>\n" +
+            "</html>";
+
+    private final String DELETE_TEXT="<!DOCTYPE html>\n" +
+            "<html lang=\"en\">\n" +
+            "<head>\n" +
+            "    <meta charset=\"UTF-8\">\n" +
+            "    <title>deleteText1234</title>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "\n" +
+            "</body>\n" +
+            "</html>";
+
+    private final String DELETE_TAG="<!DOCTYPE html>\n" +
+            "<html lang=\"en\">\n" +
+            "<head>\n" +
+            "    <meta charset=\"UTF-8\">\n" +
+            "    <title>Title@#$$$$!@!!!!@123asdvzczxasd1234</title>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "\n" +
             "</body>\n" +
             "</html>";
     @Test
     void 태그제거_테스트() {
         String deleteTag= ParserUtil.convertAccordingType(HTML_TEST, ConvertType.TAG);
-        String expect="alerthiTitle1234hi";
+        String expect="alerthiTiAAABBBtle1234hiCCCC23333333344444444444444444444455555555555555555555555555566666666666666666DDDD";
         assertEquals(expect,deleteTag);
     }
     @Test
     void 텍스트_출력_테스트() {
         String text=ParserUtil.convertAccordingType(HTML_TEST,ConvertType.TEXT);
-        String expect="DOCTYPEhtmlhtmllangenscriptalerthiscriptheadmetacharsetUTF8titleTitle1234titleheadbodyhibodyhtml";
+        String expect="DOCTYPEhtmlhtmllangenscriptalerthiscriptheadmetacharsetUTF8titleTiAAABBBtle1234titleheadbodyhiCCCC23333333344444444444444444444455555555555555555555555555566666666666666666DDDDbodyhtml";
         assertEquals(expect,text);
     }
 
@@ -73,5 +95,34 @@ class ParsingServiceImplTest {
         String result=ParserUtil.combineAlphaAndNumber(new ParsingResult("AAABBBBBCCCCDDD",""));
         String expect="AAABBBBBCCCCDDD";
         assertEquals(expect,result);
+    }
+
+    @Test
+    void 종합하여_태그제거_테스트해보기(){
+        String deleteTag= ParserUtil.convertAccordingType(DELETE_TAG, ConvertType.TAG);
+        System.out.println(deleteTag);
+        ParsingResult parsingResult=ParserUtil.divideTextAndNumbers(deleteTag);
+        System.out.println(parsingResult.getEnglish());
+        System.out.println(parsingResult.getNumbers());
+        String result=ParserUtil.combineAlphaAndNumber(parsingResult);
+        System.out.println(result);
+        String quotient=ParserUtil.getQuotient(result,4);
+        String remainder=ParserUtil.getReminder(result,4);
+        System.out.println("quo : "+quotient);
+        System.out.println("remainder : "+ remainder);
+        assertEquals("a1a1c2d2d3e3i4lssTtv",quotient);
+        assertEquals("xzz",remainder);
+    }
+
+    @Test
+    void 종합하여_텍스트제거_테스트해보기(){
+        String deleteTag= ParserUtil.convertAccordingType(DELETE_TEXT, ConvertType.TEXT);
+        ParsingResult parsingResult=ParserUtil.divideTextAndNumbers(deleteTag);
+        String result=ParserUtil.combineAlphaAndNumber(parsingResult);
+        String quotient=ParserUtil.getQuotient(result,4);
+        String remainder=ParserUtil.getReminder(result,4);
+
+        assertEquals("a1a2a3a4a8bbCcDdddddEeeeeeeeeeeeFghhhhhhiilllllllmmmmnnOooPrsTTTtttttttttttUxYyy",quotient);
+        assertEquals("",remainder);
     }
 }

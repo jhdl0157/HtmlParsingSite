@@ -27,8 +27,8 @@ public class ParsingServiceImpl implements ParsingService {
         val convertHtml= ParserUtil.convertAccordingType(html,StringToConvertType);
         val parsingData=ParserUtil.divideTextAndNumbers(convertHtml);
         val combineEnglishAndNumbers=ParserUtil.combineAlphaAndNumber(parsingData);
-        val quotient=combineEnglishAndNumbers.substring(0,(combineEnglishAndNumbers.length() / invide) * invide);
-        val remainder=combineEnglishAndNumbers.substring(combineEnglishAndNumbers.length()-combineEnglishAndNumbers.length()%invide);
+        val quotient=ParserUtil.getQuotient(combineEnglishAndNumbers,invide);
+        val remainder=ParserUtil.getReminder(combineEnglishAndNumbers,invide);
         return ParsingDto.ParserResponse
                 .builder()
                 .quotient(quotient)
