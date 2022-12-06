@@ -26,14 +26,17 @@ public class ParsingServiceImpl implements ParsingService {
     @Transactional
     public ParsingDto.ParserResponse getQuotientAndRemainder(final String url, final String type, final int invide) {
         if(url.isEmpty() && type.isEmpty() && Objects.isNull(invide)) throw new BaseException("입력 값에 문제가 있습니다.", ErrorCode.COMMON_INVALID_PARAMETER);
-        if(parsingReader.exitParsing(url, ConvertType.validType(type),invide)){
-            var parsing=parsingReader.getParsing(url, ConvertType.validType(type),invide);
-            return ParsingDto.ParserResponse
-                    .builder()
-                    .remainder(parsing.getRemainder())
-                    .quotient(parsing.getQuotient())
-                    .build();
-        }
+        /**
+         * 사이트 접속에 따라 html파일이 달라지는 문제로 주석처리
+         */
+//        if(parsingReader.exitParsing(url, ConvertType.validType(type),invide)){
+//            var parsing=parsingReader.getParsing(url, ConvertType.validType(type),invide);
+//            return ParsingDto.ParserResponse
+//                    .builder()
+//                    .remainder(parsing.getRemainder())
+//                    .quotient(parsing.getQuotient())
+//                    .build();
+//        }
         val html=getHtml(url);
         val StringToConvertType= ConvertType.validType(type);
         val convertHtml= ParserUtil.convertAccordingType(html,StringToConvertType);
