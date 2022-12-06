@@ -41,3 +41,25 @@ jobs:
       run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
+          
+    - name: Docker build & push to prod
+      run: |
+           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+           docker build -f Dockerfile-prod -t html .
+           docker tag html ${{ secrets.DOCKER_HUB_PROD_REPO }}:1.0
+           docker push ${{ secrets.DOCKER_HUB_PROD_REPO }}:1.0
+    - name: prod SSH Remote Commands
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: ${{ secrets.NCP_SERVER_HOST }}          
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        timeout: 40s       
+        script: |
+          echo "테스트 출력"
+          docker stop html
+          docker rm html
+          docker rmi ${{ secrets.DOCKER_HUB_PROD_REPO }}:1.0
+          docker pull ${{ secrets.DOCKER_HUB_PROD_REPO }}:1.0
+          docker run --name=html -p 8080:8081 -e JAVA_OPTS=-Djasypt.encryptor.password=${{ secrets.ENCRYTOR_PASSWORD }} --restart unless-stopped -e TZ=Asia/Seoul -d ${{ secrets.DOCKER_HUB_PROD_REPO }}:1.0
