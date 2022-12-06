@@ -16,11 +16,11 @@
         var type = $('[name=type]').val();
         var bundle = $('[name=invide]').val();
         if(nullCheck(url) || checkUrl(url) == false) {
-          window.location.href = 'http://wmphtml.bloodgang.shop:8080?msg=url를 확인해주세요';
+          window.location.href = 'http://wmphtml.bloodgang.shop?msg=url를 확인해주세요';
           return;
         }
         if(nullCheck(bundle) || checkBundle(bundle) == false) {
-          window.location.href = 'http://wmphtml.bloodgang.shop:8080?msg=출력묶음을 확인해주세요. 1이상만 가능합니다';
+          window.location.href = 'http://wmphtml.bloodgang.shop?msg=출력묶음을 확인해주세요. 1이상만 가능합니다';
           return;
         }
         let formData = {};
@@ -53,7 +53,7 @@
             console.log(words[2]);
             const msg=words[2].split(":");
             console.log(msg[1]);
-            const output='http://wmphtml.bloodgang.shop:8080?msg='.concat(msg[1]);
+            const output='http://wmphtml.bloodgang.shop?msg='.concat(msg[1]);
             window.location.href = output;
           }
         });
