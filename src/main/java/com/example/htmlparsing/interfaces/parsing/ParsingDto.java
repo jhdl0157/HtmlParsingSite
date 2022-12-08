@@ -5,6 +5,8 @@ import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 /**
  * inner class를 사용하여 응집도를 높임
  *
@@ -25,6 +27,7 @@ public class ParsingDto {
         private String type;
 
         @Min(value = 1,message = "1이상의 값을 적어주세요")
+        @NotNull(message = "invide는 필수값입니다")
         private int invide;
     }
 
