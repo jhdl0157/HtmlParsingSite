@@ -2,16 +2,12 @@ package com.example.htmlparsing.domain.parsing;
 
 
 import com.example.htmlparsing.common.ConvertType;
-import com.example.htmlparsing.common.ErrorCode;
-import com.example.htmlparsing.common.exception.BaseException;
 import com.example.htmlparsing.interfaces.parsing.ParsingDto;
 import com.example.htmlparsing.util.ParserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 
 @Service
@@ -21,7 +17,7 @@ public class ParsingServiceImpl implements ParsingService {
     private final JsoupExecutor jsoupExecutor;
     @Override
     public ParsingDto.ParserResponse getQuotientAndRemainder(final String url, final String type, final int invide) {
-        val html=getHtml(url);
+        val html= download_page(url);
         val StringToConvertType= ConvertType.validType(type);
         val convertHtml= ParserUtil.convertAccordingType(html,StringToConvertType);
         val parsingData=ParserUtil.divideTextAndNumbers(convertHtml);
@@ -34,7 +30,7 @@ public class ParsingServiceImpl implements ParsingService {
                 .remainder(remainder)
                 .build();
     }
-    private String getHtml(String url){
+    private String download_page(String url){
         return jsoupExecutor.parseUrl(url);
     };
 }
