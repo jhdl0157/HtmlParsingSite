@@ -21,7 +21,6 @@ public class ParsingServiceImpl implements ParsingService {
     private final JsoupExecutor jsoupExecutor;
     @Override
     public ParsingDto.ParserResponse getQuotientAndRemainder(final String url, final String type, final int invide) {
-        if(url.isEmpty() && type.isEmpty() && Objects.isNull(invide)) throw new BaseException("입력 값에 문제가 있습니다.", ErrorCode.COMMON_INVALID_PARAMETER);
         val html=getHtml(url);
         val StringToConvertType= ConvertType.validType(type);
         val convertHtml= ParserUtil.convertAccordingType(html,StringToConvertType);
